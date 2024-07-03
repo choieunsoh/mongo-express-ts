@@ -1,4 +1,4 @@
-import { Db, MongoClient } from 'mongodb';
+import { Collection, Db, MongoClient } from 'mongodb';
 import config from './config';
 
 const mongoUri = config.MONGODB_URI;
@@ -20,4 +20,9 @@ async function connectToMongo(): Promise<Db> {
   }
 }
 
-export { connectToMongo, db };
+async function getCollection<T extends Document>(collectionName: string): Promise<Collection<T>> {
+  const database = await connectToMongo();
+  return database.collection<T>(collectionName);
+}
+
+export { connectToMongo, db, getCollection };
